@@ -4,7 +4,7 @@ import IconGithub from './icons/IconGithub.vue';
 
 <template>
     <div class="footer">
-        <p>Source Code <IconGithub /></p>
+        <a href="https://github.com/RoyHcnnz/PasswordGenerator">Source Code <IconGithub /></a>
     </div>
 </template>
 
@@ -20,4 +20,12 @@ import IconGithub from './icons/IconGithub.vue';
     .footer p{
         font-family: "Courier Prime", monospace;
     }
+    a {
+        color: inherit; /* blue colors for links too */
+        text-decoration: inherit; /* no underline */
+    }
+    a:hover{
+        color: var(--color-primary-light-20)
+    }
+
 </style>

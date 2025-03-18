@@ -53,6 +53,7 @@
     .generator{
         width: 30%;
         height: 50%;
+        min-height: 400px;
         border: solid 1px var(--color-primary-trans);
         border-radius: 5px;
         padding-top: 30px;
@@ -228,6 +229,23 @@
         background-color: #064a34;
         border: solid thin var(--color-primary);
         color: var(--color-primary-light-20);
+    }
+
+    @media only screen and (max-width: 620px) {
+        .generator{
+            width: 100%;
+            height: 100%;
+            border: none;
+            padding-top: 30px;
+        }
+
+        .slider{
+            display: none;
+        }
+
+        .option{
+            width: 100%;
+        }
     }
 
 </style>

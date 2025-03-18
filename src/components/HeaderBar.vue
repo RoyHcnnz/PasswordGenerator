@@ -18,4 +18,11 @@
 
         border-bottom: solid 1px var(--color-primary-trans);
     }
+    
+    @media only screen and (max-width: 620px) {
+        .logo{
+            padding-left: 0;
+            justify-content: center;
+        }
+    }
 </style>
