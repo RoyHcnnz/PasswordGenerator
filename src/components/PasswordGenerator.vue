@@ -1,38 +1,129 @@
+<script setup lang="ts">
+import { ref } from 'vue';
+import IconCopy from './icons/IconCopy.vue';
+import { rand, useClipboard } from '@vueuse/core'
+
+const { text, isSupported, copy, copied } = useClipboard()
+</script>
+
+<script lang="ts">
+    export default {
+        data() {
+            return {
+                pwdLength: 12,
+                password: '',
+                uppercase: true,
+                lowercase: true,
+                numbers: true,
+                symbols: true
+            };
+        },
+        methods: {
+            handleLengthInput(event: any) {
+                // Access the input value directly from the event object if needed
+                console.log('Input Value from event:', event.target.value);
+                if(event.target.value)
+                if(event.target.value > 512){
+                    event.target.value = 512
+                    this.pwdLength = 512
+                }
+                if(event.target.value < 1){
+                    this.pwdLength = 1
+                }
+                this.generatePassword();
+            },
+            generatePassword(){
+                const upper: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                const lower: string = "abcdefghijklmnopqrstuvwxyz";
+                const numbers: string = "1234567890";
+                const symbols: string = " ~`!@#$%^&*()_-+={[}]|\\:;\"'<,>.?/";
+
+                var pool: string = ''
+                if(this.uppercase){
+                    pool = pool.concat(upper);
+                }
+                if(this.lowercase){
+                    pool = pool.concat(lower);
+                }
+                if(this.numbers){
+                    pool = pool.concat(numbers);
+                }
+                if(this.symbols){
+                    pool = pool.concat(symbols);
+                }
+
+                var password = '';
+                for (let i: number = 0; i < this.pwdLength; i++) {
+                    var random_index = Math.floor(Math.random() * pool.length);
+                    password += pool[random_index];
+                }
+                this.password = password;
+            },
+            randomConfig(){
+                var random = Math.floor(Math.random() * 15) + 1;
+                console.log("a = ", random)
+                console.log(random>>1)
+                console.log(random>>2)
+                console.log(random>>3)
+                this.uppercase = (random % 2 == 1);
+                this.lowercase = ((random>>1) % 2 == 1);
+                this.numbers = ((random>>2) % 2 == 1);
+                this.symbols = ((random>>3) % 2 == 1);
+                this.pwdLength = Math.floor(Math.random() * 512) + 1;
+                this.generatePassword();
+            }
+        },
+        beforeMount() {
+            this.generatePassword()
+        }
+    };
+</script>
+
 <template>
     <div class="main">
         <div class="generator">
             <div class="password-display">
-                <p>aabbcc0123456789aabbcc0123456789aabbcc0123456789aabbcc</p>
+                <p>{{ password }}</p>
             </div>
             <div class="length">
                 <p>length:</p>
-                <input type="range" min="1" max="512" value="16" class="slider" id="passwordRange">
-                <input type="number" class="length-input" >
+                <input type="range" min="1" max="512" value="16" class="slider" 
+                id="passwordRange" v-model="pwdLength" @input="handleLengthInput">
+                <input type="number" class="length-input" 
+                v-model="pwdLength" @input="handleLengthInput">
             </div>
             <div class="options">
                 <div class="option">
-                    <input type="checkbox" id="uppercase" name="uppercase" checked />
+                    <input type="checkbox" id="uppercase" name="uppercase" checked 
+                    v-model="uppercase" @change="generatePassword"/>
                     <label class="option-label" for="uppercase">Uppercase</label>
                 </div>
                 <div class="option">
-                    <input type="checkbox" id="lowercase" name="lowercase" checked />
+                    <input type="checkbox" id="lowercase" name="lowercase" checked 
+                    v-model="lowercase" @change="generatePassword"/>
                     <label for="lowercase">Lowercase</label>
                 </div>
                 <div class="option">
-                    <input type="checkbox" id="numbers" name="numbers" checked />
+                    <input type="checkbox" id="numbers" name="numbers" checked 
+                    v-model="numbers" @change="generatePassword"/>
                     <label for="numbers">Numbers</label>
                 </div>
                 <div class="option">
-                    <input type="checkbox" id="symbols" name="symbols" checked />
+                    <input type="checkbox" id="symbols" name="symbols" checked 
+                    v-model="symbols" @change="generatePassword"/>
                     <label for="symbols">Symbols</label>
                 </div>
             </div>
             <div class="main-button">
-                <button>GENERATE PASSWORD</button>
+                <button @click="generatePassword">GENERATE PASSWORD</button>
             </div>
             <div class="secondary-button">
-                <button>COPY</button>
-                <button>RANDOM CONFIG</button>
+                <button @click="copy(password)">
+                    <IconCopy />
+                    <span v-if="!copied">COPY</span>
+                    <span v-else>Copied!</span>
+                </button>
+                <button @click="randomConfig">RANDOM CONFIG</button>
             </div>
         </div>
     </div>
@@ -205,6 +296,7 @@
         width: 86%;
         display: flex;
         justify-content: space-between;
+        align-items: center;
     }
 
     .secondary-button button{
@@ -216,6 +308,10 @@
         border: solid thin var(--color-primary);
         border-radius: 5px;
         transition-duration: 0.4s;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         font-family: "Courier Prime", monospace;
         font-weight: bold;
