@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import Matrix from './Matrix.vue';
 import IconCopy from './icons/IconCopy.vue';
-import { rand, useClipboard } from '@vueuse/core'
+import { useClipboard } from '@vueuse/core'
 
 const { text, isSupported, copy, copied } = useClipboard()
 </script>
@@ -81,6 +81,7 @@ const { text, isSupported, copy, copied } = useClipboard()
 
 <template>
     <div class="main">
+        <Matrix />
         <div class="generator">
             <div class="password-display">
                 <p>{{ password }}</p>
@@ -133,7 +134,7 @@ const { text, isSupported, copy, copied } = useClipboard()
     .main{
         width: 100%;
         height: calc(100vh - 60px - 50px);
-
+        position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -148,6 +149,7 @@ const { text, isSupported, copy, copied } = useClipboard()
         border: solid 1px var(--color-primary-trans);
         border-radius: 5px;
         padding-top: 30px;
+        background: var(--vt-c-black-trans);
 
         display: flex;
         flex-direction: column;
